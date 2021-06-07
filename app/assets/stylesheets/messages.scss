@@ -6,7 +6,7 @@
 .says {
   float: left;
   position: relative;
-  // width: calc(100% - 56px);
+  width: calc(100% - 150px);
   padding: 16px;
   background: #fde8d0;
   border-radius: 15px;
@@ -29,9 +29,9 @@
 .other-user-says {
   float: right;
   position: relative;
-  // width: calc(100% - 56px);
+  width: calc(100% - 150px);
   padding: 16px;
-  background: #fde8d0;
+  background: #eeee99;
   border-radius: 15px;
   line-height: 1.5;
   word-break: break-all;
@@ -43,7 +43,7 @@
   top: 3px;
   right: -19px;
   border: 8px solid transparent;
-  border-right: 18px solid #fde8d0;
+  border-right: 18px solid #eeee99;
   -webkit-transform: rotate(145deg);
   transform: rotate(145deg);
 }
