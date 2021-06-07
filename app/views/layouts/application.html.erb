@@ -61,16 +61,6 @@
           <%= content_tag :div, message, class: :"alert alert-success" %>
         <% end %>
       <% end %>
-      <% if signed_in? %>
-        <div class="offset-md-8 mt-2">
-          <%= form_with url: search_path, method: :get, local: true do |f| %>
-            <%= f.text_field :word %>
-            <%= select_tag 'range' ,options_for_select([['User', '1'], ['Book', '2'],['Tag', '3']]) %>
-            <%= select_tag 'search', options_for_select([["前方一致","forward_match"], ["後方一致","backward_match"], ["完全一致","perfect_match"], ["部分一致","partial_match"]]) %>
-            <%= f.submit :search, class:"my-2 btn btn-sm btn-secondary" %>
-          <% end %>
-        </div>
-      <% end %>
       <%= yield %>
       <script>
         $('#stars').raty({
