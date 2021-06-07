@@ -1,0 +1,60 @@
+    <!--左側-->
+    <dev class="col-md-3">
+      <h2>User info</h2>
+      <div class="d-flex">
+        <div class="ml-3">
+          <%= attachment_image_tag current_user, :profile_image, size: "50x50", format:'jpeg', fallback:"no_image.jpg" %>
+        </div>
+        <div class="ml-5 mr-3">
+          <%= link_to show_following_user_path(current_user.id) do %>
+            <%= current_user.followings.count %><br>Following
+          <% end %>
+        </div>
+        <div>
+          <%= link_to show_followers_user_path(current_user.id) do %>
+            <%= current_user.followers.count %><br>Followers
+          <% end %>
+        </div>
+      </div>
+
+        <table class="table my-3">
+          <tr>
+            <th>name</th>
+            <td><%= current_user.name %></td>
+          </tr>
+          <tr>
+            <th>introduction</th>
+            <td><%= current_user.introduction %></td>
+          </tr>
+        </table>
+
+      <div class="row-fluid">
+        <%= link_to edit_user_path(current_user) do %>
+          <span class="btn btn-outline-secondary btn-block fas fa-user-cog"></span>
+        <% end %>
+      </div>
+
+      <h2 class="my-3">New book</h2>
+      <%= form_with model:book, local:true do |f| %>
+        <div class="form-group">
+          <h6 class="my-2">Title</h6>
+          <%= f.text_field :title ,class:"form-control" %>
+        </div>
+        <div class="form-group">
+          <h6 class="my-2">Tag</h6>
+          <p class="small">タグは半角スペースで区切ってください</p>
+          <%= f.text_field :tag_name, class:"form-control" %>
+        </div>
+        <div class="form-group">
+          <h6 class="my-2">Opinion</h6>
+          <%= f.text_area :body ,class:"form-control" %>
+        </div>
+        <div class="form-group" id="stars">
+          <h6 class="my-2">Rate</h6>
+        </div>
+        <div class="my-2">
+          <%= f.submit "Create Book",class:"btn btn-sm btn-success text-light rounded " %>
+        </div>
+      <% end %>
+    </dev>
+    <!--左側ここまで-->

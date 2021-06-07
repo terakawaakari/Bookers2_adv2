@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <h3><%= "#{@user.name}" %>さんとのチャット</h3>
+      <div class="my-3">
+        <%= form_with model: @message, local: true do |f| %>
+            <%= f.text_field :message %>
+            <%= f.hidden_field :room_id %>
+            <%= f.submit "送信", class: "btn btn-primary btn-sm" %>
+        <% end %>
+      </div>
+      <table class="table" id="message">
+        <tbody>
+          <% @messages.each do |message| %>
+            <% if message.user == current_user %>
+              <tr class="row justify-content-center">
+                <!-- アイコンを左側に表示する -->
+                <td class="col-1">
+                  <%= attachment_image_tag message.user, :profile_image, size: "30x30", format:'jpeg', fallback:"no_image.jpg" %>
+                </td>
+                <!-- メッセージを右側に表示する -->
+                <td class="col-10">
+                  <%= message.user.name %> <br>
+                  <!-- 自分用の吹き出しCSSクラスを適用する -->
+                  <div class="says">
+                    <p><%= safe_join(message.message.split("\n"),tag(:br)) %></p>
+                    <span><%= l message.created_at %></span>
+                  </div>
+                </td>
+              </tr>
+            <% else %>
+              <tr class="row justify-content-center">
+                <!-- メッセージを左側に表示する -->
+                <td class="col-10">
+                  <div class="col-7 text-right float-right">
+                    <%= message.user.name %> <br>
+                  </div>
+                  <!-- 自分以外用の吹き出しCSSクラスを適用する -->
+                  <div class="other-user-says">
+                    <p><%= safe_join(message.message.split("\n"),tag(:br)) %></p>
+                    <span><%= l message.created_at %></span>
+                  </div>
+                </td>
+                <!-- アイコンを右側に表示する -->
+                <td class="col-2">
+                  <%= attachment_image_tag message.user, :profile_image, size: "30x30", format:'jpeg', fallback:"no_image.jpg" %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

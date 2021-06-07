@@ -1,0 +1,128 @@
+<div class="container px-5 px-sm-0 pt-3">
+  <div class="row">
+    <!--左側-->
+    <div class="col-md-3">
+      <h2>User info</h2>
+      <div class="d-flex">
+        <div class="ml-3">
+          <%= attachment_image_tag @book_find.user, :profile_image, size: "50x50", format:'jpeg', fallback:"no_image.jpg" %>
+        </div>
+        <div class="ml-5 mr-3">
+          <%= link_to show_following_user_path(@book_find.user) do %>
+            <%= @book_find.user.followings.count %><br>Following
+          <% end %>
+        </div>
+        <div>
+          <%= link_to show_followers_user_path(@book_find.user) do %>
+            <%= @book_find.user.followers.count %><br>Followers
+          <% end %>
+        </div>
+      </div>
+
+       <table class="table my-3">
+          <tr>
+            <th>name</th>
+            <td><%= @book_find.user.name %></td>
+          </tr>
+          <tr>
+            <th>introduction</th>
+            <td><%= @book_find.user.introduction %></td>
+          </tr>
+        </table>
+
+        <% if signed_in? && current_user != @book_find.user %>
+          <div class="row-fluid mb-3">
+            <% if current_user.following?(@book_find.user) %>
+              <%= link_to 'Unfollow', relationship_path(current_user.relationships.find_by(follower: @book_find.user)),method: :delete,class: "btn  btn-sm btn-outline-info btn-block" %>
+            <% else %>
+              <%= link_to 'Follow', relationships_path(follower: @book_find.user),method: :post, class: "btn btn-sm btn-info btn-block" %>
+            <% end %>
+          </div>
+        <% end %>
+
+      <div class="row-fluid">
+        <%= link_to edit_user_path(@book_find.user) do %>
+          <span class="btn btn-outline-secondary btn-block fas fa-user-cog"></span>
+        <% end %>
+      </div>
+
+      <h2 class="my-3">New book</h2>
+      <%= form_with model:@book, local:true do |f| %>
+      <div class="form-group">
+      <h6 class="my-2">Title</h6>
+      <%= f.text_field :title ,class:"form-control" %>
+      </div>
+      <div class="form-group">
+      <h6 class="my-2">Tag</h6>
+      <p class="small">タグは半角スペースで区切ってください</p>
+      <%= f.text_field :tag_name, class:"form-control" %>
+      </div>
+      <div class="form-group">
+      <h6 class="my-2">Opinion</h6>
+      <%= f.text_area :body ,class:"form-control" %>
+      </div>
+      <div class="form-group" id="stars">
+        <h6 class="my-2">Rate</h6>
+      </div>
+      <div class="my-2">
+      <%= f.submit "Create Book",class:"btn btn-sm btn-success text-light rounded " %>
+      </div>
+      <% end %>
+    </div>
+    <!--左側ここまで-->
+    <!--右側-->
+    <div class="col-md-8 offset-md-1">
+      <h2>Book detail</h2>
+      <table class="table mb-0">
+       <tr>
+          <td>
+            <%= attachment_image_tag @book_find.user, :profile_image, size: "30x30", format:'jpeg', fallback:"no_image.jpg" %><br>
+            <%= link_to user_path(@book_find.user), class: 'text-nowrap' do %>
+              <%= @book_find.user.name %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to book_path(@book_find) do %>
+              <%= @book_find.title %>
+            <% end %>
+          </td>
+          <td>
+            <%= @book_find.body %>
+          </td>
+
+          <td>
+            <% @book_tags.each do |tag| %>
+              <%= link_to "#" + tag.tag_name, books_tag_index_path(tag_id: tag.id), class: "text-nowrap" %><br>
+            <% end %>
+          </td>
+
+          <td id="favorite_<%= @book_find.id %>">
+            <%= render "favorites/favorite", book: @book_find %>
+          </td>
+
+          <td class="small text-nowrap", id="counts">
+            <%= render "book_comments/comment_counts", book_find: @book_find %><br>
+              閲覧数：<%= @book_find.impressions_count %></td>
+          </td>
+
+          <td class="book-stars text-nowrap" data-score="<%= @book_find.rate %>">
+
+          <% if @book_find.user == current_user %>
+          <td><%= link_to "Edit",edit_book_path(@book_find.id), class:"btn btn-sm btn-success" %></td>
+          <td><%= link_to "Destroy",book_path(@book_find), class:"btn btn-sm btn-danger",method: :delete, data: { confirm: '削除しますか？' } %></td>
+          <% end %>
+        </tr>
+      </table>
+
+      <div class="mb-3", id="comments">
+        <%= render 'book_comments/comments',book_comment: @book_comment, book_find: @book_find %>
+      </div>
+
+      <div class="new_comment", id="form">
+        <%= render "book_comments/comment_form", book_find: @book_find, book_comment: @book_comment %>
+      </div>
+
+    </div>
+    <!--右側ここまで-->
+  </div>
+</div>

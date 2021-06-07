@@ -1,0 +1,12 @@
+<div class="container px-5 px-sm-0 pt-3">
+  <div class="row">
+    <%= render "books/left", book: @book, user_id: @user_id %>
+    <div class="col-md-8 offset-md-1">
+      <h2>Users</h2>
+        <%= link_to "グループを作成する", new_group_path %> |
+        <%= link_to "グループ一覧", groups_path %>
+        <%= render 'users/users', users: @users %>
+        <%= paginate @users %>
+    </div>
+  </div>
+</div>

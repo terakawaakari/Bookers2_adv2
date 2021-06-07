@@ -1,0 +1,131 @@
+<div class="container px-5 px-sm-0 pt-3">
+  <div class="row">
+    <div class="col-md-3">
+      <h2>User info</h2>
+
+      <% if @user == current_user %>
+        <div class="d-flex">
+          <div class="ml-3">
+            <%= attachment_image_tag current_user, :profile_image, size: "50x50", format:'jpeg', fallback:"no_image.jpg" %>
+          </div>
+          <div class="ml-5 mr-3">
+            <%= link_to show_following_user_path(current_user.id) do %>
+              <%= current_user.followings.count %><br>Following
+            <% end %>
+          </div>
+          <div>
+            <%= link_to show_followers_user_path(current_user.id) do %>
+              <%= current_user.followers.count %><br>Followers
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="d-flex">
+          <div class="ml-3">
+            <%= attachment_image_tag @user, :profile_image, size: "50x50", format:'jpeg', fallback:"no_image.jpg" %>
+          </div>
+          <div class="ml-5 mr-3"><%= @user.followings.count %><br>Following</div>
+          <div><%= @user.followers.count %><br>Followers</div>
+        </div>
+      <% end %>
+
+      <% if @user == current_user %>
+        <table class="table my-3">
+          <tr>
+            <th>name</th>
+            <td><%= current_user.name %></td>
+          </tr>
+          <tr>
+            <th>introduction</th>
+            <td><%= current_user.introduction %></td>
+          </tr>
+        </table>
+      <% else %>
+        <table class="table my-3">
+          <tr>
+            <th>name</th>
+            <td><%= @user.name %></td>
+          </tr>
+          <tr>
+            <th>introduction</th>
+            <td><%= @user.introduction %></td>
+          </tr>
+        </table>
+        <div class="row-fluid mb-3">
+          <% if current_user.following?(@user) %>
+            <%= link_to 'Unfollow', relationship_path(current_user.relationships.find_by(follower: @user)),method: :delete,class: "btn  btn-sm btn-outline-info btn-block" %>
+          <% else %>
+            <%= link_to 'Follow', relationships_path(follower: @user),method: :post, class: "btn btn-sm btn-info btn-block" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="row-fluid">
+        <%= link_to edit_user_path(@user) do %>
+          <span class="btn btn-outline-secondary btn-block fas fa-user-cog"></span>
+        <% end %>
+      </div>
+
+      <h2 class="my-3">New book</h2>
+      <%= form_with model:@book, local:true do |f| %>
+      <div class="form-group">
+      <h6 class="my-2">Title</h6>
+      <%= f.text_field :title ,class:"form-control" %>
+      </div>
+      <div class="form-group">
+      <h6 class="my-2">Tags</h6>
+      <p class="text-small">タグは半角スペースで区切ってください</p>
+      <%= f.text_field :tag_name, class:"form-control" %>
+      </div>
+      <div class="form-group">
+      <h6 class="my-2">Opinion</h6>
+      <%= f.text_area :body ,class:"form-control" %>
+      </div>
+      <div class="my-2">
+      <%= f.submit "Create Book",class:"btn btn-sm btn-success text-light rounded " %>
+      </div>
+      <% end %>
+    </div>
+    <div class="col-md-8 offset-md-1">
+      <h2>Followers</h2>
+
+      <table class="table">
+        <tr>
+          <th>image</th>
+          <th>name</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <% @user.followers.each do |user| %>
+        <tr>
+          <td>
+            <%= attachment_image_tag user, :profile_image, size: "30x30", format:'jpeg', fallback:"no_image.jpg" %>
+          </td>
+          <td>
+            <%= link_to user_path(user.id) do %>
+              <%= user.name %>
+            <% end %>
+          </td>
+          <td>
+            <%= user.followings.count %> Following
+          </td>
+          <td>
+            <%= user.followers.count %> Followers
+          </td>
+          <% if signed_in? && current_user != user %>
+            <% if current_user.following?(user) %>
+              <td><%= link_to 'Unfollow', relationship_path(current_user.relationships.find_by(follower: user)),method: :delete,class: "btn  btn-sm btn-outline-info" %></td>
+            <% else %>
+              <td><%= link_to 'Follow', relationships_path(follower: user),method: :post, class: "btn btn-sm btn-info" %></td>
+            <% end %>
+          <% else %>
+            <td></td>
+          <% end %>
+        </tr>
+        <% end %>
+      </table>
+      <%= paginate @users %>
+    </div>
+  </div>
+</div>

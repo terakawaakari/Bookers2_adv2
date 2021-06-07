@@ -1,0 +1,43 @@
+<div class="text-danger mt-3 ml-5">
+  <% if @book.errors.any? %>
+    <div class="mb-2"><%= @book.errors.count %>errors prohibited this obj from being saved:</div>
+    <% @book.errors.full_messages.each do |message| %>
+      <%= message %><br>
+    <% end %>
+  <% end %>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
+      <h2>Editing Book</h2>
+        <%= form_with model:@book, local: true do |f| %>
+          <div class="form-group">
+            <h6 class="my-2">Title</h6>
+              <%= f.text_field :title, class:"form-control" %>
+          </div>
+          <div class="form-group">
+            <h6 class="my-2">Opinion</h6>
+              <%= f.text_area :body, class:"form-control" %>
+          </div>
+          <div class="book-stars text-nowrap" data-score="<%= @book.rate %>"></div>
+          <div>
+          <%= f.submit "Update Book",class:"btn btn-success btn-sm text-light rounded my-3" %>
+          </div>
+        <% end %>
+
+        <script>
+          $('.book-stars').raty({
+            readOnly: true,
+            score: function() {
+              return $(this).attr('data-score');
+            },
+            path: '/assets/'
+          });
+        </script>
+
+      <%= link_to "Show", book_path(@book.id) %> |
+      <%= link_to "Back", books_path %>
+    </div>
+  </div>
+</div>

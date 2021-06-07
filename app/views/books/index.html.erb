@@ -1,0 +1,63 @@
+<%= render "layouts/errors", obj: @book %>
+
+<div class="container px-5 px-sm-0">
+  <div class="row">
+    <!--左側-->
+    <%= render 'books/left',book:@book,user_id:@user_id %>
+    <!--左側ここまで-->
+    <!--右側-->
+    <div class="col-md-8 offset-md-1">
+      <h2 class="mt-3">Books</h2>
+      <%= link_to "新しい順", books_path(new_soat: "true") %> |
+      <%= link_to "評価が高い順", books_path(rate_soat: "true") %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Opinion</th>
+            <th>Tags</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        <% @books.each do |book| %>
+          <tr>
+            <td>
+              <%= link_to user_path(book.user_id) do %>
+              <%= attachment_image_tag book.user, :profile_image, size: "30x30", format:'jpeg', fallback:"no_image.jpg" %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to book_path(book.id) do %>
+                <%= book.title %>
+              <% end %>
+            </td>
+            <td><%= book.body %></td>
+
+            <td>
+              <% book.tags.each do |tag| %>
+                <%= link_to "#" + "#{tag.tag_name}", books_tag_index_path(tag_id: tag.id) %><br>
+              <% end %>
+            </td>
+
+            <td id="favorite_<%= book.id %>">
+              <%= render partial: "favorites/favorite", locals: { book: book } %>
+            </td>
+
+            <td class="small text-nowrap">
+              <%= link_to "#{book.book_comments.count}コメント", book_path(book) %><br>
+              閲覧数：<%= book.impressions_count %></td>
+            <td class="book-stars text-nowrap" data-score="<%= book.rate %>"></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+
+      <%= paginate @books %>
+    </div>
+    <!--右側ここまで-->
+  </div>
+</div>

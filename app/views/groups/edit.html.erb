@@ -1,0 +1,27 @@
+<%= render "layouts/errors", obj: @group %>
+
+<div class="container px-5 px-sm-0 pt-3">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
+      <h2>Editing Group</h2>
+      <%= form_with model:@group ,local:true do |f| %>
+      <div class="form-group">
+      <h6>グループ名</h6>
+      <%= f.text_field :name, class:"form-control" %>
+      </div>
+      <div class="form-group">
+      <h6>紹介文</h6>
+      <%= f.text_area :introduction, class:"form-control" %>
+      </div>
+      <div class="form-group">
+      <h6>グループ画像</h6>
+      <%= attachment_image_tag @group,:image,size:"50x50" %>
+      <%= f.attachment_field :image,placeholder:"ファイルを選択" %>
+      </div>
+      <div class="my-2">
+      <%= f.submit "Update Group",class: "btn btn-sm btn-secondary" %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
