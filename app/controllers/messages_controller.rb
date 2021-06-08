@@ -1,6 +1,7 @@
 class MessagesController < ApplicationController
 
   def show
+    # user_id,room_id,entry_idを取得
     @user = User.find(params[:id])
     rooms = current_user.entries.pluck(:room_id)
     entries = Entry.find_by(user_id: @user.id, room_id: rooms)
