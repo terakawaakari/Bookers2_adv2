@@ -29,6 +29,9 @@
         </table>
 
       <div class="row-fluid">
+        <% if AddUserToGroup.exists?(user_id: current_user.id) %>
+          <i class="fas fa-exclamation mb-1 ml-2" style="color: red;"></i>
+        <% end %>
         <%= link_to edit_user_path(current_user) do %>
           <span class="btn btn-outline-secondary btn-block fas fa-user-cog"></span>
         <% end %>

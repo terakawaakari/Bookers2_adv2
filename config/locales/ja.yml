@@ -2,3 +2,17 @@ ja:
   time:
     formats:
       default: "%Y/%m/%d %H:%M"
+
+ja:
+  activerecord:
+    attributes:
+      book:
+        title: タイトル
+        body: 紹介文
+
+ja:
+  activerecord:
+    attributes:
+      user:
+        name: 名前
+        email: メールアドレス

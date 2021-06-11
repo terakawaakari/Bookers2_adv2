@@ -16,7 +16,6 @@ class User < ApplicationRecord
   has_many :book_comments, dependent: :destroy
 
   has_many :favorites, dependent: :destroy
-  # has_many :favorited_books, through: :favorites, source: :book
 
   has_many :relationships, dependent: :destroy
   has_many :followings, through: :relationships, source: :follower
@@ -29,7 +28,7 @@ class User < ApplicationRecord
 
   has_many :messages, dependent: :destroy
   has_many :entries, dependent: :destroy
-  validates :content, presence: true
+  #validates :content, presence: true
 
   def follow(other_user)
     return if self == other_user
