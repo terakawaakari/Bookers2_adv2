@@ -3,25 +3,56 @@
 <div class="container px-5 px-sm-0 pt-3">
   <div class="row">
     <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
+      <% if AddUserToGroup.exists?(user_id: current_user.id) %>
+        <p class="mt-4"><%= "#{@owner.name}さんから#{@group.name}グループへ招待されました。下のボタンから承認してください。" %></p>
+        <button id="openModal" class="btn btn-sm btn-success mb-3">招待を承認 / 拒否</button>
+        <!-- モーダルエリアここから -->
+        <div id="modalArea" class="modalArea">
+          <div id="modalBg" class="modalBg">
+            <div class="modalWrapper">
+              <div class="modalContents">
+                <p class="mt-4">招待を承認しますか？</p>
+                <div class="my-4">
+                  <%= link_to '承認', invited_join_group_path(@group_id), class: "btn btn-sm btn-success mr-3" %>
+                  <%= link_to '拒否', reject_group_path(@group_id), class: "btn btn-sm btn-primary" %>
+                </div>
+                <div id="closeModal" class="closeModal">×</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
       <h2>User info</h2>
       <%= form_with model:@user ,local:true do |f| %>
-      <div class="form-group">
-      <h6>Name</h6>
-      <%= f.text_field :name, class:"form-control" %>
-      </div>
-      <div class="form-group">
-      <h6>Image</h6>
-      <%= attachment_image_tag @user,:profile_image,size:"50x50" %>
-      <%= f.attachment_field :profile_image,placeholder:"ファイルを選択" %>
-      </div>
-      <div class="form-group">
-      <h6>Introduction</h6>
-      <%= f.text_area :introduction, class:"form-control" %>
-      </div>
-      <div class="my-2">
-      <%= f.submit "Update User",class: "btn btn-sm btn-secondary" %>
-      </div>
+        <div class="form-group">
+        <h6>Name</h6>
+        <%= f.text_field :name, class:"form-control" %>
+        </div>
+        <div class="form-group">
+        <h6>Image</h6>
+        <%= attachment_image_tag @user,:profile_image,size:"50x50" %>
+        <%= f.attachment_field :profile_image,placeholder:"ファイルを選択" %>
+        </div>
+        <div class="form-group">
+        <h6>Introduction</h6>
+        <%= f.text_area :introduction, class:"form-control" %>
+        </div>
+        <div class="my-2">
+        <%= f.submit "Update User",class: "btn btn-sm btn-secondary" %>
+        </div>
       <% end %>
     </div>
   </div>
 </div>
+
+<script>
+  $(function () {
+    $('#openModal').click(function(){
+      $('#modalArea').fadeIn();
+    });
+    $('#closeModal , #modalBg').click(function(){
+      $('#modalArea').fadeOut();
+    });
+  });
+</script>

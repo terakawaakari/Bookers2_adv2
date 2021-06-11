@@ -4,6 +4,11 @@ class UsersController < ApplicationController
     @users = User.page(params[:page]).reverse_order
     @user_id = current_user
     @book = Book.new
+    @groups = Group.where(owner_id: current_user.id)
+  end
+
+  def add_user_to_group
+    AddUserToGroup.create(user_id: params[:user_id], group_id: params[:group_id])
   end
 
   def show
@@ -37,6 +42,11 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
     @user_id = current_user
+    if AddUserToGroup.exists?(user_id: current_user.id)
+      @group_id = AddUserToGroup.find_by(user_id: current_user.id).group_id
+      @group = Group.find(@group_id)
+      @owner = User.find(@group.owner_id)
+    end
 
     if @user != current_user
       redirect_to user_path(current_user), alert: "#{@user.name}の情報は変更できません"

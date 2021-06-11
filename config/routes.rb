@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :users, :only => [:index, :show, :edit, :update]
+  
+  get 'add_user_to_group' => 'users#add_user_to_group'
 
   resources :books do
     resources :book_comments, :only => [:create, :destroy]
@@ -36,11 +38,11 @@ Rails.application.routes.draw do
     resource :events, :only => [:new, :create]
     get 'preview' => 'events#preview'
     member do
-      get :join, :leave
+      get :join, :leave, :invited_join, :reject
     end
   end
 
-
   get 'message/:id' => 'messages#show', as: 'message'
   resources :messages, only: [:create]
+
 end

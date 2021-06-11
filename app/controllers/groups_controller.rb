@@ -23,6 +23,22 @@ class GroupsController < ApplicationController
     redirect_to group_path(@group), notice: "#{@group.name}グループに参加しました"
   end
 
+  def invited_join
+    @group_id = AddUserToGroup.find_by(user_id: current_user.id).group_id
+    @group = Group.find(@group_id)
+    @group.users << current_user
+    @group.save
+    AddUserToGroup.find_by(user_id: current_user.id).destroy
+    redirect_to request.referrer, notice: "#{@group.name}グループに参加しました"
+  end
+
+  def reject
+    @group_id = AddUserToGroup.find_by(user_id: current_user.id).group_id
+    @group = Group.find(@group_id)
+    AddUserToGroup.find_by(user_id: current_user.id).destroy
+    redirect_to request.referrer, notice: "#{@group.name}グループへの参加を拒否しました"
+  end
+
   def leave
     @group = Group.find(params[:id])
     @group.users.delete(current_user)

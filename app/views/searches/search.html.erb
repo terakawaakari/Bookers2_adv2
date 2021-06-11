@@ -5,7 +5,7 @@
       <h1>Search results</h1>
 
         <% if @range == '1' %>
-          <%= render 'users/users', users: @users %>
+          <%= render 'users/users', users: @users, groups: @group %>
         <% elsif @range == '2' %>
           <%= render 'books/books', books: @books %>
         <% else %>

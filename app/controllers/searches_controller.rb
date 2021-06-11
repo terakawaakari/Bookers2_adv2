@@ -7,6 +7,7 @@ class SearchesController < ApplicationController
 
     if @range == '1'
       @users = User.search(search,word)
+      @groups = Group.where(owner_id: current_user.id)
     elsif @range == '2'
       @books = Book.search(search,word)
     else

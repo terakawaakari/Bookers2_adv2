@@ -8,6 +8,7 @@
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
     <% users.each do |user| %>
     <tr>
@@ -35,10 +36,32 @@
         <% else %>
           <td><%= link_to 'Follow', relationships_path(follower: user),method: :post, class: "btn btn-sm btn-info" %></td>
         <% end %>
+          <td>
+            <select class='group' id=<%= "#{user.id}" %>>
+              <option value="0">グループへ招待</option>
+              <% groups.each do |group| %>
+                <option value=<%= "#{group.id}" %>><%= "#{group.name}" %></option>
+              <% end %>
+            </select>
+          </td>
       <% else %>
+        <td></td>
         <td></td>
       <% end %>
     </tr>
     <% end %>
   </table>
 <% end %>
+
+<script>
+  $(function(){
+    $('.group').change(function(){
+      $.ajax({
+        url: "add_user_to_group",
+        type: "GET",
+        data: { user_id: $(this).attr('id'), group_id: $(this).has('option:selected').val() }
+      });
+      $(this).children('option:selected').remove();
+    });
+  });
+</script>

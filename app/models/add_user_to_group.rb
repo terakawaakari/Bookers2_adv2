@@ -1,0 +1,2 @@
+class AddUserToGroup < ApplicationRecord
+end
